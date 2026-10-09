@@ -1,0 +1,26 @@
+{
+  "amount_due": {
+    "value": "$124,500.00",
+    "raw_text": "$124,500.00",
+    "source": "invoices/northwind_2031.pdf",
+    "kind": "observed",
+    "ambiguity": "none",
+    "confirmed_by_user": false
+  },
+  "invoice_date": {
+    "value": "2026-09-18",
+    "raw_text": "2026-09-18",
+    "source": "invoices/northwind_2031.pdf",
+    "kind": "observed",
+    "ambiguity": "none",
+    "confirmed_by_user": false
+  },
+  "due_date": {
+    "value": "2026-10-18",
+    "raw_text": "2026-10-18",
+    "source": "invoice_date + 30 days",
+    "kind": "computed",
+    "ambiguity": "none",
+    "confirmed_by_user": false
+  }
+}

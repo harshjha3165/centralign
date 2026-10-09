@@ -1,0 +1,26 @@
+{
+  "latest_invoice_date": {
+    "value": "2026-09-01",
+    "raw_text": "2026-09-01",
+    "source": "invoices/northwind_lying.pdf",
+    "kind": "observed",
+    "ambiguity": "none",
+    "confirmed_by_user": false
+  },
+  "amount_due": {
+    "value": "$84,000.00",
+    "raw_text": "$84,000.00",
+    "source": "invoices/northwind_lying.pdf",
+    "kind": "observed",
+    "ambiguity": "none",
+    "confirmed_by_user": false
+  },
+  "due_date": {
+    "value": "2026-10-01",
+    "raw_text": "2026-10-01",
+    "source": "invoices/northwind_lying.pdf",
+    "kind": "computed",
+    "ambiguity": "none",
+    "confirmed_by_user": false
+  }
+}

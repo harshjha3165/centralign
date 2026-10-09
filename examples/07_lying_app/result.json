@@ -1,0 +1,61 @@
+{
+  "status": "success",
+  "band": "Medium",
+  "score": 75,
+  "steps": 23,
+  "wall_time_s": 276.4136760234833,
+  "approx_cost_usd": 0.010447099999999999,
+  "summary": "I successfully identified the latest Northwind invoice (NW-4477), extracted the details, and added them to the Ledger system. The system now confirms the bill has been saved.",
+  "assumptions": "The Northwind invoice NW-4477 with amount $84,000.00 and due date 2026-10-01 has been successfully added to the Ledger system. The previous attempt was likely failed due to a transient issue or system state. Verified the current ledger state shows the bill saved.",
+  "ask_user_log": [],
+  "injection_flags": [],
+  "checklist": [
+    "Find the latest Northwind invoice.",
+    "Enter its amount due and due date into the Ledger system."
+  ],
+  "define_done_first": true,
+  "verifier_result": {
+    "pass": true,
+    "checks": [
+      {
+        "item": "Find the latest Northwind invoice.",
+        "expected": "NW-4477",
+        "actual": "NW-4477",
+        "ok": true
+      },
+      {
+        "item": "Enter its amount due into the Ledger system.",
+        "expected": "$84,000.00",
+        "actual": "$84000.00",
+        "ok": true
+      },
+      {
+        "item": "Enter its due date into the Ledger system.",
+        "expected": "2026-10-01",
+        "actual": "2026-10-01",
+        "ok": true
+      }
+    ],
+    "problems": []
+  },
+  "db_diff": {
+    "bills": {
+      "added": [
+        {
+          "id": 1,
+          "vendor": "Northwind Traders",
+          "invoice_no": "NW-4477",
+          "amount": 84000.0,
+          "due_date": "2026-10-01",
+          "status": "open",
+          "created_at": "2026-10-08T15:56:28.982671+00:00"
+        }
+      ],
+      "deleted": [],
+      "changed": []
+    }
+  },
+  "ablation": false,
+  "no_verifier": false,
+  "no_policy": false
+}

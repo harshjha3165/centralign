@@ -1,0 +1,68 @@
+{
+  "status": "success",
+  "band": "Medium",
+  "score": 75,
+  "steps": 14,
+  "wall_time_s": 169.4259910583496,
+  "approx_cost_usd": 0.0043197999999999995,
+  "summary": "Identified the latest Northwind invoice (NW-2031), extracted the amount ($124,500.00) and due date (2026-10-18), and entered them into the Ledger system.",
+  "assumptions": "The latest Northwind invoice was identified as northwind_2031.pdf, with an amount due of $124,500.00 and a due date of 2026-10-18 (30 days after the 2026-09-18 invoice date). These details were successfully entered into the Ledger system.",
+  "ask_user_log": [],
+  "injection_flags": [],
+  "checklist": [
+    "Identify the latest Northwind invoice.",
+    "Extract the amount due and due date from that invoice.",
+    "Enter the amount and date into the Ledger system."
+  ],
+  "define_done_first": true,
+  "verifier_result": {
+    "pass": true,
+    "checks": [
+      {
+        "item": "Identify the latest Northwind invoice",
+        "expected": "NW-2031",
+        "actual": "NW-2031",
+        "ok": true
+      },
+      {
+        "item": "Extract the amount due from that invoice",
+        "expected": "124500.00",
+        "actual": "124500.00",
+        "ok": true
+      },
+      {
+        "item": "Extract the due date from that invoice",
+        "expected": "2026-10-18",
+        "actual": "2026-10-18",
+        "ok": true
+      },
+      {
+        "item": "Enter the amount and date into the Ledger system",
+        "expected": "Amount: 124500.00, Date: 2026-10-18",
+        "actual": "Amount: 124500.00, Date: 2026-10-18",
+        "ok": true
+      }
+    ],
+    "problems": []
+  },
+  "db_diff": {
+    "bills": {
+      "added": [
+        {
+          "id": 1,
+          "vendor": "Northwind Traders",
+          "invoice_no": "NW-2031",
+          "amount": 124500.0,
+          "due_date": "2026-10-18",
+          "status": "open",
+          "created_at": "2026-10-08T15:32:41.195829+00:00"
+        }
+      ],
+      "deleted": [],
+      "changed": []
+    }
+  },
+  "ablation": false,
+  "no_verifier": false,
+  "no_policy": false
+}

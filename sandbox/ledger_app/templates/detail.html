@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Bill #{{ bill['id'] }}</h2>
+<table>
+  <tr><th>Vendor</th><td>{{ bill['vendor'] }}</td></tr>
+  <tr><th>Invoice number</th><td>{{ bill['invoice_no'] }}</td></tr>
+  <tr><th>Amount due</th><td>${{ "%.2f"|format(bill['amount']) }}</td></tr>
+  <tr><th>Due date</th><td>{{ bill['due_date'] }}</td></tr>
+  <tr><th>Status</th><td>{{ bill['status'] }}</td></tr>
+</table>
+
+<form method="post" action="{{ url_for('mark_paid', bill_id=bill['id']) }}" style="display:inline">
+  <button type="submit" data-risk="destructive">Mark paid</button>
+</form>
+<form method="post" action="{{ url_for('delete_bill', bill_id=bill['id']) }}" style="display:inline">
+  <button type="submit" data-risk="destructive">Delete</button>
+</form>
+{% endblock %}

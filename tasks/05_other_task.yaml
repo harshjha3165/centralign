@@ -1,0 +1,51 @@
+id: 05_other_task
+task: >-
+  List the bills due in the next 7 days and their total.
+fault: none
+ui_variant: a
+
+# Generalization probe: a read-only task the worker package has never seen
+# the shape of. No worker/ code may change to pass this. "Today" is pinned
+# so the 7-day window is deterministic for grading regardless of wall clock.
+today_override: "2026-10-08"
+
+seed:
+  invoices: []
+  existing_bills:
+    - vendor: "Acme Supplies"
+      invoice_no: "AC-10"
+      amount: 500.00
+      due_date: "2026-10-10"
+      status: open
+    - vendor: "Globex Corp"
+      invoice_no: "GX-11"
+      amount: 1500.00
+      due_date: "2026-10-14"
+      status: open
+    - vendor: "Initech"
+      invoice_no: "IN-12"
+      amount: 2000.00
+      due_date: "2026-10-20"
+      status: open
+    - vendor: "Northwind Traders"
+      invoice_no: "NW-13"
+      amount: 300.00
+      due_date: "2026-10-08"
+      status: open
+
+ask_user_replies: []
+
+expect:
+  # Medium or High are both legitimately correct here: whether this lands Medium
+  # depends on whether the model happens to notebook the running total as its
+  # own `kind="computed"` fact (reasonable either way) - see README Assumptions.
+  min_band: Medium
+  read_only: true
+  db_added: 0
+  db_changed: 0
+  db_deleted: 0
+  answer_contains_any:
+    - "2300.00"
+    - "2,300.00"
+    - "2300"
+  define_done_first: true

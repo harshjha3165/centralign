@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Run {{ run_id }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="wrap">
+    <a class="back-link" href="{{ url_for('index') }}">&larr; new run</a>
+    <div class="eyebrow"><span class="dot" id="live-dot"></span> <span id="live-label">live</span></div>
+    <h1 style="font-size:22px;">{{ run_id }}</h1>
+
+    <div class="card">
+      <div class="log" id="steps">
+        <p class="empty" id="empty-msg">Waiting for the first step&hellip;</p>
+      </div>
+    </div>
+
+    <div class="card" id="final" style="display:none">
+      <div class="result-head">
+        <span class="status-pill" id="status-pill"></span>
+        <strong id="band-label"></strong>
+      </div>
+      <pre class="result-json" id="final-json"></pre>
+      <div class="result-links">
+        <a id="report-link" href="#">report.md</a>
+        <a id="replay-link" href="#">replay.html &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="ask-backdrop">
+    <div class="modal">
+      <div class="tag">worker is asking</div>
+      <p class="q" id="ask-question"></p>
+      <form id="ask-form">
+        <input type="text" id="ask-answer" autocomplete="off" placeholder="Type your reply&hellip;">
+        <button type="submit">Reply</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const runId = {{ run_id|tojson }};
+    const stepsLog = document.getElementById('steps');
+    const emptyMsg = document.getElementById('empty-msg');
+    const askBackdrop = document.getElementById('ask-backdrop');
+    const askQuestion = document.getElementById('ask-question');
+    const liveDot = document.getElementById('live-dot');
+    const liveLabel = document.getElementById('live-label');
+    let lastQuestion = null;
+
+    const badgeClass = {OK: 'ok', WRITE: 'warn', BLOCKED: 'bad', ERROR: 'bad'};
+
+    function escapeHtml(s) {
+      const d = document.createElement('div');
+      d.textContent = s == null ? '' : String(s);
+      return d.innerHTML;
+    }
+
+    const es = new EventSource(`/stream/${runId}`);
+
+    es.onmessage = (ev) => {
+      const step = JSON.parse(ev.data);
+      if (emptyMsg) emptyMsg.remove();
+      const row = document.createElement('div');
+      row.className = 'step';
+      const cls = badgeClass[step.label] || 'ok';
+      row.innerHTML =
+        `<span class="n">#${step.step}</span>` +
+        `<span class="tool">${escapeHtml(step.tool)}</span>` +
+        `<span class="why">${escapeHtml(step.why)}</span>` +
+        `<span class="badge ${cls}">${escapeHtml(step.label)}</span>`;
+      stepsLog.appendChild(row);
+      row.scrollIntoView({block: 'nearest'});
+    };
+
+    es.addEventListener('ask_user', (ev) => {
+      const data = JSON.parse(ev.data);
+      if (data.question !== lastQuestion) {
+        lastQuestion = data.question;
+        askQuestion.textContent = data.question;
+        askBackdrop.classList.add('show');
+        document.getElementById('ask-answer').focus();
+      }
+    });
+
+    es.addEventListener('done', (ev) => {
+      const data = JSON.parse(ev.data);
+      askBackdrop.classList.remove('show');
+      liveDot.style.background = data.error ? 'var(--bad)' : 'var(--ok)';
+      liveDot.style.animation = 'none';
+      liveLabel.textContent = data.error ? 'error' : 'finished';
+
+      const final = document.getElementById('final');
+      final.style.display = 'block';
+      const pill = document.getElementById('status-pill');
+      const payload = data.error ? {error: data.error} : data.result;
+      const status = data.error ? 'error' : (data.result ? data.result.status : 'error');
+      pill.textContent = status;
+      pill.className = 'status-pill ' + status;
+      document.getElementById('band-label').textContent =
+        data.result ? `Confidence: ${data.result.band} (${data.result.score}/100)` : '';
+      document.getElementById('final-json').textContent = JSON.stringify(payload, null, 2);
+      document.getElementById('report-link').href = `/runs/${runId}/report.md`;
+      document.getElementById('replay-link').href = `/runs/${runId}/replay.html`;
+      es.close();
+    });
+
+    document.getElementById('ask-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const answerBox = document.getElementById('ask-answer');
+      const answer = answerBox.value;
+      answerBox.value = '';
+      askBackdrop.classList.remove('show');
+      fetch(`/run/${runId}/reply`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `answer=${encodeURIComponent(answer)}`,
+      });
+    });
+  </script>
+</body>
+</html>

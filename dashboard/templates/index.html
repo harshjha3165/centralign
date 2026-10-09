@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Worker Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> CentrAlign &middot; live</div>
+    <h1>Autonomous Worker</h1>
+    <p class="sub">Type a task, or pick a scenario preset. Watch it think, click, and check its own work &mdash; live.</p>
+
+    {% if current_run_id %}
+    <div class="banner {{ '' if current_done else 'active' }}">
+      <div>
+        {% if current_done %}
+          Last run: <a href="{{ url_for('run_page', run_id=current_run_id) }}">{{ current_run_id }}</a>
+        {% else %}
+          <span class="pulse" style="display:inline-block;margin-right:8px;"></span>
+          Run in progress: <a href="{{ url_for('run_page', run_id=current_run_id) }}">{{ current_run_id }}</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="card">
+      <form method="post" action="{{ url_for('start') }}">
+        <label for="scenario">Scenario preset</label>
+        <select id="scenario" name="scenario">
+          <option value="">&mdash; custom task, current sandbox state &mdash;</option>
+          {% for s in scenarios %}
+          <option value="{{ s.id }}">{{ s.id }}</option>
+          {% endfor %}
+        </select>
+
+        <label for="task">Task</label>
+        <textarea id="task" name="task" rows="3" placeholder="Describe the task, or pick a preset above"></textarea>
+
+        <div class="check-row">
+          <input type="checkbox" id="no_verifier" name="no_verifier">
+          <label for="no_verifier">Ablation: skip the verifier gate</label>
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="no_policy" name="no_policy">
+          <label for="no_policy">Ablation: skip the policy gate</label>
+        </div>
+
+        <button type="submit">Start run &rarr;</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const SCENARIO_TASKS = {{ scenarios_json|safe }};
+    const scenarioSelect = document.getElementById('scenario');
+    const taskBox = document.getElementById('task');
+    scenarioSelect.addEventListener('change', () => {
+      const task = SCENARIO_TASKS[scenarioSelect.value];
+      if (task) taskBox.value = task;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+.venv/
+.git/
+__pycache__/
+*.pyc
+runs/*
+!runs/.gitkeep
+sandbox/invoices/*
+!sandbox/invoices/.gitkeep
+*.db
+.env
+examples/
+.DS_Store

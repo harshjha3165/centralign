@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="get">
+  <label for="q">Search vendor or invoice number
+    <input id="q" name="q" value="{{ q }}">
+  </label>
+  <button type="submit">Search</button>
+</form>
+
+<p><a href="{{ url_for('new_bill') }}">New bill</a></p>
+
+<table>
+  <tr><th>Vendor</th><th>Invoice no.</th><th>Amount</th><th>Due date</th><th>Status</th></tr>
+  {% for b in bills %}
+  <tr>
+    <td><a href="{{ url_for('bill_detail', bill_id=b['id']) }}">{{ b['vendor'] }}</a></td>
+    <td>{{ b['invoice_no'] }}</td>
+    <td>${{ "%.2f"|format(b['amount']) }}</td>
+    <td>{{ b['due_date'] }}</td>
+    <td>{{ b['status'] }}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="5">No bills.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

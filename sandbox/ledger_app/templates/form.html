@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>New bill</h2>
+<form method="post">
+  <label for="vendor">Vendor
+    <select id="vendor" name="vendor">
+      <option value="">Choose a vendor</option>
+      {% for v in vendors %}
+      <option value="{{ v }}" {% if v == values.vendor %}selected{% endif %}>{{ v }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  {% if errors.vendor %}<div class="error">{{ errors.vendor }}</div>{% endif %}
+
+  <label for="invoice_no">Invoice number
+    <input id="invoice_no" name="invoice_no" value="{{ values.invoice_no or '' }}">
+  </label>
+  {% if errors.invoice_no %}<div class="error">{{ errors.invoice_no }}</div>{% endif %}
+
+  <label for="amount">Amount payable
+    <input id="amount" name="amount" value="{{ values.amount or '' }}">
+  </label>
+  {% if errors.amount %}<div class="error">{{ errors.amount }}</div>{% endif %}
+
+  <label for="due_date">Due date (YYYY-MM-DD)
+    <input id="due_date" name="due_date" value="{{ values.due_date or '' }}">
+  </label>
+  {% if errors.due_date %}<div class="error">{{ errors.due_date }}</div>{% endif %}
+
+  <button type="submit">Submit</button>
+</form>
+{% endblock %}

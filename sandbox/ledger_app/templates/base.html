@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ title or "Ledger" }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1><a href="{{ url_for('list_bills') }}">Ledger</a></h1>
+
+  {% if show_survey %}
+  <div class="modal">
+    <p>Quick survey: how satisfied are you with Ledger?</p>
+    <form method="post" action="{{ url_for('dismiss_survey') }}">
+      <button type="submit">Close</button>
+    </form>
+  </div>
+  {% endif %}
+
+  {% if saved %}
+  <div class="toast">Saved.</div>
+  {% endif %}
+
+  {% block content %}{% endblock %}
+</body>
+</html>

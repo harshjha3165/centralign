@@ -1,0 +1,18 @@
+{
+  "latest_northwind_invoice_amount_due": {
+    "value": "124500.00",
+    "raw_text": "124500.00",
+    "source": "invoices/northwind_2031.pdf",
+    "kind": "observed",
+    "ambiguity": "none",
+    "confirmed_by_user": false
+  },
+  "latest_northwind_invoice_due_date": {
+    "value": "2026-10-18",
+    "raw_text": "2026-10-18",
+    "source": "invoices/northwind_2031.pdf",
+    "kind": "computed",
+    "ambiguity": "none",
+    "confirmed_by_user": false
+  }
+}

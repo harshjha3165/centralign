@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Replay - __TASK_TITLE__</title>
+<style>
+body { font: 15px/1.5 system-ui, sans-serif; color: #111; background: #fff; max-width: 1100px; margin: 0 auto; padding: 16px; }
+h1 { font-size: 20px; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #ccc; padding: 4px 6px; text-align: left; vertical-align: top; font-size: 13px; }
+.cols { display: flex; gap: 16px; }
+.left { flex: 1; max-height: 70vh; overflow: auto; }
+.right { flex: 1; }
+.ok { color: #166534; } .warn { color: #92400e; } .bad { color: #b91c1c; }
+.row-sel { background: #eef; }
+img { max-width: 100%; border: 1px solid #ccc; }
+pre { white-space: pre-wrap; font-family: ui-monospace, monospace; font-size: 12px; border: 1px solid #ccc; padding: 6px; max-height: 240px; overflow: auto; }
+input[type=range] { width: 100%; }
+</style>
+</head>
+<body>
+<h1>Replay: __TASK_TITLE__</h1>
+<p><strong>Status:</strong> __STATUS__ &nbsp; <strong>Confidence:</strong> __BAND__ (__SCORE__/100) &nbsp;
+<strong>Steps:</strong> __NUM_STEPS__ &nbsp; <strong>Time:</strong> __WALL_TIME__s</p>
+<h2>Definition of done</h2>
+<pre>__CHECKLIST_TEXT__</pre>
+
+<input type="range" id="slider" min="0" max="__MAX_INDEX__" value="0">
+<div class="cols">
+  <div class="left">
+    <table id="steps-table">
+      <tr><th>#</th><th>Tool</th><th>Why</th><th>Result</th></tr>
+      __STEP_ROWS__
+    </table>
+  </div>
+  <div class="right">
+    <div id="screenshot"></div>
+    <h3>Notebook at this step</h3>
+    <pre id="notebook"></pre>
+  </div>
+</div>
+
+<h2>Verifier checks</h2>
+<pre>__VERIFIER_TEXT__</pre>
+<h2>Confidence breakdown</h2>
+<pre>__CONFIDENCE_TEXT__</pre>
+<h2>DB diff</h2>
+<pre>__DBDIFF_TEXT__</pre>
+
+<script>
+const STEPS = __STEPS_JSON__;
+const slider = document.getElementById('slider');
+const shot = document.getElementById('screenshot');
+const nb = document.getElementById('notebook');
+const rows = document.querySelectorAll('#steps-table tr[data-idx]');
+
+function render(i) {
+  const s = STEPS[i];
+  if (!s) return;
+  shot.innerHTML = s.screenshot_b64 ? '<img src="data:image/png;base64,' + s.screenshot_b64 + '">' : '(no screenshot)';
+  nb.textContent = JSON.stringify(s.notebook, null, 2);
+  rows.forEach(r => r.classList.remove('row-sel'));
+  const sel = document.querySelector('#steps-table tr[data-idx="' + i + '"]');
+  if (sel) sel.classList.add('row-sel');
+}
+
+slider.addEventListener('input', () => render(parseInt(slider.value, 10)));
+rows.forEach(r => r.addEventListener('click', () => {
+  slider.value = r.getAttribute('data-idx');
+  render(parseInt(slider.value, 10));
+}));
+document.addEventListener('keydown', (e) => {
+  const maxIndex = __MAX_INDEX__;
+  if (e.key === 'ArrowRight') { slider.value = Math.min(parseInt(slider.value,10)+1, maxIndex); render(parseInt(slider.value,10)); }
+  if (e.key === 'ArrowLeft') { slider.value = Math.max(parseInt(slider.value,10)-1, 0); render(parseInt(slider.value,10)); }
+});
+render(0);
+</script>
+</body>
+</html>

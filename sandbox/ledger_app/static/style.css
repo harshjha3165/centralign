@@ -1,0 +1,13 @@
+body { font: 16px/1.5 system-ui, sans-serif; color: #111; background: #fff;
+       max-width: 900px; margin: 0 auto; padding: 16px; }
+h1 { font-size: 20px; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; }
+label { display: block; margin-top: 12px; }
+input, select { font: inherit; padding: 4px; width: 100%; max-width: 320px; }
+button { font: inherit; padding: 4px 12px; }
+a { color: #0645ad; }
+code, pre { font-family: ui-monospace, monospace; }
+.ok { color: #166534; } .warn { color: #92400e; } .bad, .error { color: #b91c1c; }
+.toast { border: 1px solid #166534; padding: 8px; margin: 8px 0; }
+.modal { border: 2px solid #111; background: #fff; padding: 16px; margin: 16px 0; }
