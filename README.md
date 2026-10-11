@@ -2,7 +2,7 @@
 
 A small AI worker that takes a plain-English task — *"Find the latest Northwind invoice, enter the amount and due date into Ledger, tell me when done"* — and does the work with a real browser and real files inside a simulated company app, checks its own work, and reports back with evidence: a replayable recording, a computed confidence score, a database diff, and a scorecard with real pass rates. **Priorities, in order: Autonomy, Execution, Reliability, Verification, Generalization.**
 
-> **Demo video:** not recorded in this environment (no screen recorder available). In its place: a real `examples/*/replay.html` and the scorecard below, both from actual runs against the live API, not a staged recording.
+> **Demo video:** https://drive.google.com/file/d/1lRdmTfcMPfvS8irS2Ux_MQZCAAGA6Cnr/view?usp=sharing
 > **Sample replay:** [examples/01_happy/replay.html](examples/01_happy/replay.html) — open it directly in a browser.
 
 ## Table of contents
