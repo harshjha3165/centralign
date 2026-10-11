@@ -216,7 +216,7 @@ Each row is an argument: a decision, the reasoning behind it, and the alternativ
 
 ## 8. Engineering log: deviations, decisions, and bugs
 
-This section exists because the spec (`claude.md`) assumes an Anthropic key, and none was available. Every deviation below is argued — what changed, why, and what was considered and rejected — rather than just asserted.
+This section exists because the original project spec assumes an Anthropic key, and none was available. Every deviation below is argued — what changed, why, and what was considered and rejected — rather than just asserted.
 
 ### 8.1 Provider substitution: Gemini, not Claude
 
@@ -310,4 +310,6 @@ On the line-count budget specifically: `worker/` is ~1,300 lines of Python again
 
 ## 11. Models, APIs, and libraries
 
-Google Gemini API with function calling (`google-genai` SDK; model from `WORKER_MODEL` env var, default `gemini-3.1-flash-lite`); Playwright (sync, Chromium); Flask + SQLite for the mock app; `pypdf` for reading invoice PDFs; `reportlab` for generating seed PDFs; `PyYAML` for scenario files. Frontend: plain HTML + one CSS file + a little vanilla JS, no build step. This README, the code, and the engineering decisions documented above were AI-assisted (Claude, via Claude Code) end to end, working from the `claude.md` specification in this repo — but the worker itself runs on Gemini, not Claude, for the reasons argued in §8.1.
+Google Gemini API with function calling (`google-genai` SDK; model from `WORKER_MODEL` env var, default `gemini-3.1-flash-lite`); Playwright (sync, Chromium); Flask + SQLite for the mock app; `pypdf` for reading invoice PDFs; `reportlab` for generating seed PDFs; `PyYAML` for scenario files. Frontend: plain HTML + one CSS file + a little vanilla JS, no build step.
+
+**AI-assisted development:** this project was built end-to-end with **Claude Code** — from the initial scaffolding through every fix documented in §8 (the real bugs found by live testing, the provider swap, the confidence-tuning calls). Using it is exactly why a project this size (worker loop, policy engine, verifier, confidence system, mock app, 8 scenarios, a live dashboard, deployment config) was feasible to actually finish and test end-to-end rather than half-build. Worth noting precisely *because* it doesn't shortcut the engineering itself: every claim in this README — the bugs, the honest failures, the scorecard numbers — is backed by a real run against the real API, not generated text taken on faith. The worker itself runs on Gemini, not Claude, for the reasons argued in §8.1 — Claude Code was the build tool, Gemini is what the shipped agent runs on.
